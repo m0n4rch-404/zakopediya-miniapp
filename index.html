@@ -6,10 +6,10 @@
     <meta name="theme-color" content="#101C2E">
     <meta name="description" content="Zakopediya — bilimlar ensiklopediyasi va Zakovat testlari">
     <title>Zakopediya</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20261116">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="app.js"></script>
+    <script defer src="app.js?v=20261116"></script>
 </head>
 <body>
 <div class="app">
@@ -20,7 +20,6 @@
         </button>
         <button class="profile-button" id="profileBtn" aria-label="Profil">👤</button>
     </header>
-
     <main>
         <section id="homePage" class="page active">
             <section class="welcome">
@@ -28,13 +27,10 @@
                 <h1>Har kuni yangi<br><span>bir bilim!</span></h1>
                 <p>Izlang, o‘rganing va bilimingizni sinab ko‘ring.</p>
             </section>
-
             <section class="search-section" aria-label="Fakt qidirish">
                 <div class="search-box"><span>⌕</span><input type="search" id="searchInput" placeholder="Fakt yoki atama qidiring..." autocomplete="off"><button id="clearSearch" class="clear-search" aria-label="Qidiruvni tozalash" hidden>×</button></div>
             </section>
-
             <div id="connectionStatus" class="status-line" role="status">Ma’lumotlar bazasiga ulanmoqda…</div>
-
             <section class="section">
                 <div class="section-heading"><h2>Bilimlar markazi</h2><span>01 — 04</span></div>
                 <div class="main-grid">
@@ -44,48 +40,40 @@
                     <button class="feature-card categories" data-page="categories"><span class="feature-icon">◈</span><strong>Kategoriyalar</strong><small>Mavzularni kashf eting</small><span class="card-arrow">↗</span></button>
                 </div>
             </section>
-
             <section class="daily-fact" id="dailyFact"><div class="fact-top"><span>KUN FAKTI</span><span>✦</span></div><h2>Fakt yuklanmoqda…</h2><p>Zakopediya bilan bilim olamining yangi qirralarini kashf eting.</p></section>
             <section class="stats-strip"><div><strong id="totalFacts">—</strong><span>jami fakt</span></div><div><strong id="totalCategories">—</strong><span>kategoriya</span></div></section>
         </section>
-
         <section id="encyclopediaPage" class="page">
             <div class="page-heading"><button class="back-button" data-page="home">←</button><div><span class="eyebrow">ZAKOPEDIYA</span><h1>Ensiklopediya</h1></div></div>
             <div class="search-box page-search"><span>⌕</span><input type="search" id="factSearchInput" placeholder="Fakt nomi yoki mazmuni..."><button id="clearFactSearch" class="clear-search" aria-label="Qidiruvni tozalash" hidden>×</button></div>
             <div class="filter-row"><select id="categoryFilter" aria-label="Kategoriya bo‘yicha saralash"><option value="">Barcha kategoriyalar</option></select><span id="resultCount" class="muted"></span></div>
-            <div class="alphabet-section"><div class="alphabet-heading"><strong>Alifbo bo‘yicha</strong><span id="alphabetResult"></span></div><div id="alphabetFilter" class="alphabet-filter"><button class="alphabet-btn active" data-letter="">Barchasi</button></div></div>
+            <div class="alphabet-section"><div class="alphabet-heading"><strong>Alifbo bo‘yicha</strong><span id="alphabetResult">Barcha harflar</span></div><div id="alphabetFilter" class="alphabet-filter"><button type="button" class="alphabet-btn active" data-letter="">Barchasi</button><button type="button" class="alphabet-btn" data-letter="A">A</button><button type="button" class="alphabet-btn" data-letter="B">B</button><button type="button" class="alphabet-btn" data-letter="D">D</button><button type="button" class="alphabet-btn" data-letter="E">E</button><button type="button" class="alphabet-btn" data-letter="F">F</button><button type="button" class="alphabet-btn" data-letter="G">G</button><button type="button" class="alphabet-btn" data-letter="G‘">G‘</button><button type="button" class="alphabet-btn" data-letter="H">H</button><button type="button" class="alphabet-btn" data-letter="I">I</button><button type="button" class="alphabet-btn" data-letter="J">J</button><button type="button" class="alphabet-btn" data-letter="K">K</button><button type="button" class="alphabet-btn" data-letter="L">L</button><button type="button" class="alphabet-btn" data-letter="M">M</button><button type="button" class="alphabet-btn" data-letter="N">N</button><button type="button" class="alphabet-btn" data-letter="O">O</button><button type="button" class="alphabet-btn" data-letter="O‘">O‘</button><button type="button" class="alphabet-btn" data-letter="P">P</button><button type="button" class="alphabet-btn" data-letter="Q">Q</button><button type="button" class="alphabet-btn" data-letter="R">R</button><button type="button" class="alphabet-btn" data-letter="S">S</button><button type="button" class="alphabet-btn" data-letter="T">T</button><button type="button" class="alphabet-btn" data-letter="U">U</button><button type="button" class="alphabet-btn" data-letter="V">V</button><button type="button" class="alphabet-btn" data-letter="X">X</button><button type="button" class="alphabet-btn" data-letter="Y">Y</button><button type="button" class="alphabet-btn" data-letter="Z">Z</button><button type="button" class="alphabet-btn" data-letter="Sh">Sh</button><button type="button" class="alphabet-btn" data-letter="Ch">Ch</button><button type="button" class="alphabet-btn" data-letter="Ng">Ng</button><button type="button" class="alphabet-btn" data-letter="#">0–9</button></div></div>
             <div id="factsList" class="facts-list"><div class="loading">Faktlar yuklanmoqda…</div></div>
             <div class="pagination"><button id="prevPage" class="secondary-button" disabled>← Oldingi</button><span id="pageInfo">1 / 1</span><button id="nextPage" class="secondary-button" disabled>Keyingi →</button></div>
         </section>
-
         <section id="categoriesPage" class="page">
             <div class="page-heading"><button class="back-button" data-page="home">←</button><div><span class="eyebrow">MAVZULAR</span><h1>Kategoriyalar</h1></div></div>
             <p class="page-description">O‘zingizga qiziq mavzuni tanlang va unga oid faktlarni o‘qing.</p>
             <div id="categoriesList" class="categories-list"><div class="loading">Kategoriyalar yuklanmoqda…</div></div>
         </section>
-
         <section id="quizPage" class="page">
             <div class="page-heading"><button class="back-button" data-page="home">←</button><div><span class="eyebrow">BILIMINGIZNI SINANG</span><h1>Zakovat testlari</h1></div></div>
             <div class="notice-card"><span class="notice-icon">🧠</span><h2>Testlar keyingi bosqichda</h2><p>Hozir birinchi navbatda mavjud 866 ta faktni Mini App’ga xavfsiz ulayapmiz. Test savollari va natijalarini keyin mavjud bazani saqlagan holda integratsiya qilamiz.</p></div>
         </section>
-
         <section id="ratingPage" class="page">
             <div class="page-heading"><button class="back-button" data-page="home">←</button><div><span class="eyebrow">ENG BILIMDONLAR</span><h1>Reyting</h1></div></div>
             <div class="notice-card"><span class="notice-icon">🏆</span><h2>Reyting tayyorlanmoqda</h2><p>Hozirgi bazada test natijalari saqlanadi. Adolatli umumiy reytingni ko‘rsatishdan oldin ishtirokchilarni aniqlash va natijalarni hisoblash qoidalarini sozlaymiz.</p></div>
         </section>
-
         <section id="profilePage" class="page">
             <div class="page-heading"><button class="back-button" data-page="home">←</button><div><span class="eyebrow">ZAKOPEDIYA</span><h1>Mening profilim</h1></div></div>
             <div class="profile-card"><div class="avatar">👤</div><h2 id="profileName">Mehmon</h2><p id="profileHint">Telegram orqali ochilganda profilingiz ko‘rinadi.</p></div>
             <div class="notice-card compact"><h3>Profil va test tarixi</h3><p>Foydalanuvchi profili va PIN tizimi keyingi integratsiya bosqichida qo‘shiladi.</p></div>
         </section>
-
         <section id="factDetailPage" class="page">
             <div class="page-heading"><button class="back-button" id="backFromFact">←</button><div><span class="eyebrow">FAKT TA’RIFI</span><h1>Fakt</h1></div></div>
             <article id="factDetail" class="fact-detail"></article>
         </section>
     </main>
-
     <nav class="bottom-nav" aria-label="Asosiy navigatsiya">
         <button class="nav-item active" data-page="home"><span>⌂</span><small>Bosh sahifa</small></button>
         <button class="nav-item" data-page="encyclopedia"><span>▤</span><small>Faktlar</small></button>
