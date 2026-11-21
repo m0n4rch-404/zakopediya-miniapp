@@ -1,1 +1,0 @@
-# zakopediya-miniapp
