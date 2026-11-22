@@ -1059,4 +1059,101 @@ async function init() {
     }
 }
 
-init();
+
+async function startAppWithSubscriptionCheck() {
+    const overlay = document.createElement("div");
+
+    overlay.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:999999;
+        background:#101C2E;
+        color:white;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:25px;
+        font-family:Arial,sans-serif;
+    `;
+
+    overlay.innerHTML = `
+        <div style="max-width:360px">
+            <h2>📚 Zakopediya</h2>
+            <p id="accessMessage">Obunangiz tekshirilmoqda...</p>
+            <a id="channelLink"
+               href="https://t.me/zako404MN"
+               target="_blank"
+               style="display:none;background:#229ED9;color:white;
+               padding:13px 20px;border-radius:12px;
+               text-decoration:none;font-weight:bold">
+               📢 Telegram kanaliga obuna bo‘lish
+            </a>
+            <br><br>
+            <button id="retryAccess"
+                style="display:none;background:#D9A441;color:#101C2E;
+                border:0;padding:13px 20px;border-radius:12px;
+                font-weight:bold">
+                🔄 Obunani tekshirish
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const message = overlay.querySelector("#accessMessage");
+    const channelLink = overlay.querySelector("#channelLink");
+    const retryButton = overlay.querySelector("#retryAccess");
+
+    async function checkAccess() {
+        message.textContent = "Obunangiz tekshirilmoqda...";
+        channelLink.style.display = "none";
+        retryButton.style.display = "none";
+
+        try {
+            if (!tg || !tg.initData) {
+                throw new Error("Mini App Telegram orqali ochilmadi.");
+            }
+
+            const response = await fetch(
+                "https://zakopediya-bot.zmurod814.workers.dev/check-access",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        initData: tg.initData
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.allowed) {
+                message.textContent =
+                    "Davom etish uchun Telegram kanalimizga obuna bo‘ling.";
+                channelLink.style.display = "inline-block";
+                retryButton.style.display = "inline-block";
+                return;
+            }
+
+            overlay.remove();
+            await init();
+
+        } catch (error) {
+            console.error("Obuna tekshirish xatosi:", error);
+            message.textContent =
+                "Tekshirishda xatolik yuz berdi. Telegram orqali qayta urinib ko‘ring.";
+            channelLink.style.display = "inline-block";
+            retryButton.style.display = "inline-block";
+        }
+    }
+
+    retryButton.addEventListener("click", checkAccess);
+
+    await checkAccess();
+}
+
+startAppWithSubscriptionCheck();
+
