@@ -675,30 +675,56 @@ const runSearch = debounce((value, source) => {
 ========================= */
 async function loadQuizCount() {
     if (!db) return;
+
     const countEl = $('quizBankCount');
     const homeEl = $('homeQuizCount');
+
     try {
-        const { count, error } = await db
-            .from('quiz_questions')
-            .select('id', { count: 'exact', head: true });
+        const { data, error } = await db.rpc(
+            'get_quiz_question_count'
+        );
+
         if (error) throw error;
-        state.quizTotal = Number(count || 0);
-        const formatted = `${state.quizTotal.toLocaleString('uz-UZ')} ta`;
+
+        state.quizTotal = Number(data ?? 0);
+
+        const formatted =
+            `${state.quizTotal.toLocaleString('uz-UZ')} ta`;
+
         if (countEl) countEl.textContent = formatted;
-        if (homeEl) homeEl.textContent = state.quizTotal.toLocaleString('uz-UZ');
+
+        if (homeEl) {
+            homeEl.textContent =
+                state.quizTotal.toLocaleString('uz-UZ');
+        }
+
         const updated = $('quizBankUpdated');
-        if (updated) updated.textContent = `Oxirgi tekshiruv: ${new Date().toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'})}`;
-        document.querySelectorAll('.test-lengths button').forEach(button => {
-            const amount = Number(button.dataset.count);
-            button.disabled = state.quizTotal < amount;
-            button.title = state.quizTotal < amount ? `Bazadagi savollar soni ${amount} taga yetmaydi` : `${amount} ta savolli test`;
-        });
+
+        if (updated) {
+            updated.textContent =
+                `Oxirgi tekshiruv: ${new Date().toLocaleTimeString('uz-UZ', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}`;
+        }
+
+        document.querySelectorAll('.test-lengths button')
+            .forEach(button => {
+                const amount = Number(button.dataset.count);
+                button.disabled = state.quizTotal < amount;
+            });
+
     } catch (error) {
         console.error('Testlar sonini olish xatosi:', error);
+
         if (countEl) countEl.textContent = 'Aniqlanmadi';
         if (homeEl) homeEl.textContent = '—';
+
         const updated = $('quizBankUpdated');
-        if (updated) updated.textContent = 'quiz_questions jadvali yoki ruxsatlarni tekshiring';
+
+        if (updated) {
+            updated.textContent = 'Testlar sonini yuklashda xatolik';
+        }
     }
 }
 
